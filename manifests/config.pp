@@ -1,7 +1,11 @@
 class cowbuilder::config {
   $distribution = $cowbuilder::distribution
+  $http_proxy   = $cowbuilder::http_proxy
+  if $cowbuilder::config::http_proxy and $cowbuilder::config::http_proxy != 'UNDEFINED' {
+    $cow_proxy = "--http-proxy ${cowbuilder::config::http_proxy}"
+  }
   $etcfile      = '/etc/cowbuilder.distribution'
-  $cow_command  = "cowbuilder --distribution $distribution"
+  $cow_command  = "cowbuilder --distribution $distribution $cow_proxy"
 
   exec { $etcfile:
     command => "bash -c 'echo $distribution > $etcfile'",
